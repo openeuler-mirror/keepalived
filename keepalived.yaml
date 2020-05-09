@@ -1,0 +1,4 @@
+version_control: github
+src_repo: acassen/keepalived
+tag_prefix: ^v
+seperator: .
