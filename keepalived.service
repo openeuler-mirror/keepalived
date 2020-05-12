@@ -5,7 +5,7 @@ Wants=network-online.target
 
 [Service]
 Type=forking
-PIDFile=/var/run/keepalived.pid
+PIDFile=/run/keepalived.pid
 KillMode=process
 EnvironmentFile=-/etc/sysconfig/keepalived
 ExecStart=/usr/sbin/keepalived $KEEPALIVED_OPTIONS
