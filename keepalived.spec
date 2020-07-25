@@ -2,12 +2,13 @@
 %bcond_without vrrp
 %bcond_without sha1
 %bcond_with profile
+%bcond_without nftables
 %bcond_with debug
 
 %global _hardened_build 1
 
 Name:		keepalived
-Version:	2.0.12
+Version:	2.0.20
 Release:	2
 Summary:	High Availability monitor built upon LVS, VRRP and service pollers
 License:	GPLv2+
@@ -16,7 +17,7 @@ Source0:	http://www.keepalived.org/software/keepalived-%{version}.tar.gz
 Source1: 	keepalived.service
 
 BuildRequires:	net-snmp-devel gcc systemd-units openssl-devel libnl3-devel
-BuildRequires:  ipset-devel iptables-devel libnfnetlink-devel
+BuildRequires:  ipset-devel iptables-devel libnfnetlink-devel libnftnl-devel
 %{?systemd requires}
 
 %description
@@ -44,6 +45,7 @@ or all together to provide resilient infrastructures.
 %configure  %{?with_debug:--enable-debug}  %{?with_profile:--enable-profile} \
             %{!?with_vrrp:--disable-vrrp} %{?with_sha1:--enable-sha1} \
 	    --with-init=systemd %{!?with_vrrp:--disable-vrrp} \
+            %{?with_nftables:--enable-nftables --disable-iptables --disable-ipset} \
 	    %{?with_snmp:--enable-snmp --enable-snmp-rfc} \
             
 %make_build STRIP=/bin/true
@@ -87,5 +89,5 @@ install -Dd -m 0755 %{buildroot}%{_libexecdir}/keepalived
 %{_mandir}/man*
 
 %changelog
-* Sat Dec 21 2019 openEuler Buildteam <buildteam@openeuler.org> - 2.0.12-2
+* Fri  21 2020 openEuler Buildteam <buildteam@openeuler.org> - 2.0.20-2
 - Package init
