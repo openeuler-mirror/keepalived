@@ -9,7 +9,7 @@
 
 Name:		keepalived
 Version:	2.0.20
-Release:	2
+Release:	3
 Summary:	High Availability monitor built upon LVS, VRRP and service pollers
 License:	GPLv2+
 URL:		http://www.keepalived.org/
@@ -89,5 +89,8 @@ install -Dd -m 0755 %{buildroot}%{_libexecdir}/keepalived
 %{_mandir}/man*
 
 %changelog
+* Tue Aug 18 2020 smileknife<jackshan2010@aliyun.com> - 2.0.20-3
+- update release for rebuilding
+
 * Fri  21 2020 openEuler Buildteam <buildteam@openeuler.org> - 2.0.20-2
 - Package init
