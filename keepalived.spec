@@ -9,7 +9,7 @@
 
 Name:		keepalived
 Version:	2.0.20
-Release:	3
+Release:	4
 Summary:	High Availability monitor built upon LVS, VRRP and service pollers
 License:	GPLv2+
 URL:		http://www.keepalived.org/
@@ -18,6 +18,7 @@ Source1: 	keepalived.service
 
 BuildRequires:	net-snmp-devel gcc systemd-units openssl-devel libnl3-devel
 BuildRequires:  ipset-devel iptables-devel libnfnetlink-devel libnftnl-devel
+Requires:       %{name}-help = %{version}-%{release}
 %{?systemd requires}
 
 %description
@@ -89,6 +90,9 @@ install -Dd -m 0755 %{buildroot}%{_libexecdir}/keepalived
 %{_mandir}/man*
 
 %changelog
+* Fri Nov 06 2020 leiju<leiju4@huawei.com> - 2.0.20-4
+- Add Requires keepalived-help into keepalived
+
 * Tue Aug 18 2020 smileknife<jackshan2010@aliyun.com> - 2.0.20-3
 - update release for rebuilding
 
