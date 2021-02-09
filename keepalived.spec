@@ -9,7 +9,7 @@
 
 Name:		keepalived
 Version:	2.0.20
-Release:	4
+Release:	17
 Summary:	High Availability monitor built upon LVS, VRRP and service pollers
 License:	GPLv2+
 URL:		http://www.keepalived.org/
@@ -90,6 +90,9 @@ install -Dd -m 0755 %{buildroot}%{_libexecdir}/keepalived
 %{_mandir}/man*
 
 %changelog
+* Wed Feb 09 2021 kwb0523<kwb0523@163.com> - 2.0.20-17
+- rebuild keepalived
+
 * Fri Nov 06 2020 leiju<leiju4@huawei.com> - 2.0.20-4
 - Add Requires keepalived-help into keepalived
 
