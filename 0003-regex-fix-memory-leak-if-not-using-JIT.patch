@@ -1,0 +1,26 @@
+From 4ab53a9bdac7701900d238574cd86e0a987b8a45 Mon Sep 17 00:00:00 2001
+From: Alexandre Cassen <acassen@gmail.com>
+Date: Fri, 5 Jun 2020 16:40:43 +0200
+Subject: [PATCH 149/691] regex: fix memory leak if not using JIT
+
+---
+ keepalived/check/check_http.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/keepalived/check/check_http.c b/keepalived/check/check_http.c
+index f2f61c9..e14f82d 100644
+--- a/keepalived/check/check_http.c
++++ b/keepalived/check/check_http.c
+@@ -771,6 +771,9 @@ prepare_regex(url_t *url)
+ 		pcre2_get_error_message(pcreErrorNumber, buffer, sizeof buffer);
+ 		log_message(LOG_INFO, "Regex JIT compilation failed: '%s': %s\n", url->regex->pattern, (char *)buffer);
+ 
++		FREE_CONST_PTR(r->pattern);
++		FREE(r);
++
+ 		return;
+ 	}
+ #endif
+-- 
+1.8.3.1
+
