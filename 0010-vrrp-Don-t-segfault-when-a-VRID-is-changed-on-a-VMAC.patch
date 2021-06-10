@@ -1,0 +1,81 @@
+From d00153b11938f973816d39fabfd7edb6c69e46e8 Mon Sep 17 00:00:00 2001
+From: Quentin Armitage <quentin@armitage.org.uk>
+Date: Tue, 17 Nov 2020 16:14:18 +0000
+Subject: [PATCH 447/691] vrrp: Don't segfault when a VRID is changed on a VMAC
+ when reloading
+
+With many thanks to Louis Scalbert (@louis-oui) for identifying the
+issue and providing a patch that formed the basis of this patch.
+
+Signed-off-by: Quentin Armitage <quentin@armitage.org.uk>
+---
+ keepalived/vrrp/vrrp_daemon.c | 16 ++++++++--------
+ keepalived/vrrp/vrrp_if.c     | 18 ++++++++++--------
+ 2 files changed, 18 insertions(+), 16 deletions(-)
+
+diff --git a/keepalived/vrrp/vrrp_daemon.c b/keepalived/vrrp/vrrp_daemon.c
+index ea950c9..aa3052d 100644
+--- a/keepalived/vrrp/vrrp_daemon.c
++++ b/keepalived/vrrp/vrrp_daemon.c
+@@ -551,6 +551,14 @@ start_vrrp(data_t *prev_global_data)
+ 		}
+ 	}
+ 
++	/* Init & start the VRRP packet dispatcher */
++	if (!reload && global_data->vrrp_startup_delay) {
++		log_message(LOG_INFO, "Delaying startup for %g seconds", global_data->vrrp_startup_delay / TIMER_HZ_DOUBLE);
++		thread_add_timer(master, vrrp_dispatcher_init, NULL,
++				 global_data->vrrp_startup_delay);
++	} else
++		thread_add_event(master, vrrp_dispatcher_init, NULL, 0);
++
+ 	/* Complete VRRP initialization */
+ 	if (!vrrp_complete_init()) {
+ 		stop_vrrp(KEEPALIVED_EXIT_CONFIG);
+@@ -610,14 +618,6 @@ start_vrrp(data_t *prev_global_data)
+ 	if (__test_bit(DUMP_CONF_BIT, &debug))
+ 		dump_data_vrrp(NULL);
+ 
+-	/* Init & start the VRRP packet dispatcher */
+-	if (!reload && global_data->vrrp_startup_delay) {
+-		log_message(LOG_INFO, "Delaying startup for %g seconds", global_data->vrrp_startup_delay / TIMER_HZ_DOUBLE);
+-		thread_add_timer(master, vrrp_dispatcher_init, NULL,
+-				 global_data->vrrp_startup_delay);
+-	} else
+-		thread_add_event(master, vrrp_dispatcher_init, NULL, 0);
+-
+ 	/* Set the process priority and non swappable if configured */
+ 	set_process_priorities(global_data->vrrp_realtime_priority,
+ #if HAVE_DECL_RLIMIT_RTTIME == 1
+diff --git a/keepalived/vrrp/vrrp_if.c b/keepalived/vrrp/vrrp_if.c
+index 6847df9..d40f9f1 100644
+--- a/keepalived/vrrp/vrrp_if.c
++++ b/keepalived/vrrp/vrrp_if.c
+@@ -1311,14 +1311,16 @@ cleanup_lost_interface(interface_t *ifp)
+ #endif
+ 
+ 		/* Find the sockpool entry. If none, then we have closed the socket */
+-		if (vrrp->sockets->fd_in != -1) {
+-			thread_cancel_read(master, vrrp->sockets->fd_in);
+-			close(vrrp->sockets->fd_in);
+-			vrrp->sockets->fd_in = -1;
+-		}
+-		if (vrrp->sockets->fd_out != -1) {
+-			close(vrrp->sockets->fd_out);
+-			vrrp->sockets->fd_out = -1;
++		if (vrrp->sockets) {
++			if (vrrp->sockets->fd_in != -1) {
++				thread_cancel_read(master, vrrp->sockets->fd_in);
++				close(vrrp->sockets->fd_in);
++				vrrp->sockets->fd_in = -1;
++			}
++			if (vrrp->sockets->fd_out != -1) {
++				close(vrrp->sockets->fd_out);
++				vrrp->sockets->fd_out = -1;
++			}
+ 		}
+ 
+ 		if (IF_ISUP(ifp))
+-- 
+1.8.3.1
+
