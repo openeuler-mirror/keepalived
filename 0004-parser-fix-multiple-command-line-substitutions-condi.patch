@@ -1,0 +1,32 @@
+From d37b2f4794acf1b0b431110c5e1fb23d652c5962 Mon Sep 17 00:00:00 2001
+From: Quentin Armitage <quentin@armitage.org.uk>
+Date: Tue, 7 Jul 2020 21:16:26 +0100
+Subject: [PATCH 283/691] parser: fix multiple command line
+ substitutions/conditions
+
+For example:
+$NO_STRICT      @high   unicast_src_ip 10.1.5.1
+would cause the parser to enter an infinite loop.
+
+Signed-off-by: Quentin Armitage <quentin@armitage.org.uk>
+---
+ lib/parser.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/parser.c b/lib/parser.c
+index f6c522c..73911d9 100644
+--- a/lib/parser.c
++++ b/lib/parser.c
+@@ -1826,8 +1826,8 @@ read_line(char *buf, size_t size)
+ 		if (len == 0)
+ 			continue;
+ 
+-		recheck = false;
+ 		do {
++			recheck = false;
+ 			if (buf[0] == '@') {
+ 				/* If the line starts '@', check the following word matches the system id.
+ 				   @^ reverses the sense of the match */
+-- 
+1.8.3.1
+
