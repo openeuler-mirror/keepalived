@@ -1,0 +1,28 @@
+From 2f7fdfc1a45931753d77a17b1b67c6725a5f6784 Mon Sep 17 00:00:00 2001
+From: Quentin Armitage <quentin@armitage.org.uk>
+Date: Wed, 14 Oct 2020 16:17:08 +0100
+Subject: [PATCH 380/691] vrrp: fix checking if kernel netlink socket is open
+
+0 is a valid value for a file descriptor.
+
+Signed-off-by: Quentin Armitage <quentin@armitage.org.uk>
+---
+ keepalived/core/keepalived_netlink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/keepalived/core/keepalived_netlink.c b/keepalived/core/keepalived_netlink.c
+index 6ac26dc..3169013 100644
+--- a/keepalived/core/keepalived_netlink.c
++++ b/keepalived/core/keepalived_netlink.c
+@@ -2314,7 +2314,7 @@ kernel_netlink(thread_ref_t thread)
+ void
+ kernel_netlink_poll(void)
+ {
+-	if (!nl_kernel.fd)
++	if (nl_kernel.fd < 0)
+ 		return;
+ 
+ 	netlink_parse_info(netlink_broadcast_filter, &nl_kernel, NULL, true);
+-- 
+1.8.3.1
+
