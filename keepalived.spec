@@ -9,7 +9,7 @@
 
 Name:		keepalived
 Version:	2.0.20
-Release:	18
+Release:	19
 Summary:	High Availability monitor built upon LVS, VRRP and service pollers
 License:	GPLv2+
 URL:		http://www.keepalived.org/
@@ -27,6 +27,7 @@ Patch0008:	0008-ipvs-fix-a-file-descriptor-leak-with-SSL_GET.patch
 Patch0009:	0009-core-Fix-a-file-descriptor-leak-when-reloading.patch
 Patch0010:	0010-vrrp-Don-t-segfault-when-a-VRID-is-changed-on-a-VMAC.patch
 Patch0011:	0011-vrrp-clear-old_vrrp_data-and-old_global_data-when-me.patch
+Patch0012:      CVE-2021-44225.patch
 
 BuildRequires:	net-snmp-devel gcc systemd-units openssl-devel libnl3-devel
 BuildRequires:  ipset-devel iptables-devel libnfnetlink-devel libnftnl-devel
@@ -102,6 +103,12 @@ install -Dd -m 0755 %{buildroot}%{_libexecdir}/keepalived
 %{_mandir}/man*
 
 %changelog
+* Thu Dec 23 2021 wangxp006 <wangxp006@163.com> -  2.0.20-19
+- Type:bugfix
+- ID:NA 
+- SUG:NA
+- DESC:fix CVE-2021-44225
+
 * Thu Jun 10 2021 kwb0523<kwb0523@163.com> - 2.0.20-18
 - backport upstream patchs
 
