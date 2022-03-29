@@ -9,12 +9,14 @@
 
 Name:		keepalived
 Version:	2.2.4
-Release:	1
+Release:	2
 Summary:	High Availability monitor built upon LVS, VRRP and service pollers
 License:	GPLv2+
 URL:		http://www.keepalived.org/
 Source0:	http://www.keepalived.org/software/keepalived-%{version}.tar.gz
 Source1: 	keepalived.service
+
+Patch0001:	CVE-2021-44225.patch
 
 BuildRequires:	net-snmp-devel gcc systemd-units openssl-devel libnl3-devel
 BuildRequires:  ipset-devel iptables-devel libnfnetlink-devel libnftnl-devel
@@ -90,6 +92,12 @@ install -Dd -m 0755 %{buildroot}%{_libexecdir}/keepalived
 %{_mandir}/man*
 
 %changelog
+* Tue Mar 29 2022 kwb0523 <kwb0523@163.com> -  2.2.4-2
+- Type:CVE
+- ID:NA 
+- SUG:NA
+- DESC:fix CVE-2021-44225
+
 * Tue Dec 21 2021 kwb0523 <kwb0523@163.com> -  2.2.4-1
 - Type:bugfix
 - ID:NA 
