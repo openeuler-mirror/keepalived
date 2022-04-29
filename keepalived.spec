@@ -8,29 +8,19 @@
 %global _hardened_build 1
 
 Name:		keepalived
-Version:	2.0.20
-Release:	4
+Version:	2.2.4
+Release:	2
 Summary:	High Availability monitor built upon LVS, VRRP and service pollers
 License:	GPLv2+
 URL:		http://www.keepalived.org/
 Source0:	http://www.keepalived.org/software/keepalived-%{version}.tar.gz
 Source1: 	keepalived.service
 
-Patch0001:      0001-Fix-interfaaces-coming-up-during-vrrp_script-init-ph.patch
-Patch0002:      0002-Fix-segfault-when-checker-process-terminates-with-SN.patch
-Patch0003:      0003-regex-fix-memory-leak-if-not-using-JIT.patch
-Patch0004:      0004-parser-fix-multiple-command-line-substitutions-condi.patch
-Patch0005:      0005-Fix-detecting-setsid-error-in-xdaemon.patch
-Patch0006:      0006-vrrp-fix-checking-if-kernel-netlink-socket-is-open.patch
-Patch0007:      0007-vrrp-ensure-memory-used-for-entries-in-etc-iproute2-.patch
-Patch0008:      0008-ipvs-fix-a-file-descriptor-leak-with-SSL_GET.patch
-Patch0009:      0009-core-Fix-a-file-descriptor-leak-when-reloading.patch
-Patch0010:      0010-vrrp-Don-t-segfault-when-a-VRID-is-changed-on-a-VMAC.patch
-Patch0011:      0011-vrrp-clear-old_vrrp_data-and-old_global_data-when-me.patch
-Patch0012:      CVE-2021-44225.patch
+Patch0001:	CVE-2021-44225.patch
 
 BuildRequires:	net-snmp-devel gcc systemd-units openssl-devel libnl3-devel
 BuildRequires:  ipset-devel iptables-devel libnfnetlink-devel libnftnl-devel
+BuildRequires:  file-devel libmnl-devel
 %{?systemd requires}
 
 %description
@@ -102,11 +92,17 @@ install -Dd -m 0755 %{buildroot}%{_libexecdir}/keepalived
 %{_mandir}/man*
 
 %changelog
-* Thu Dec 23 2021 wangxp006 <wangxp006@163.com> -  2.0.20-4
+* Tue Mar 29 2022 kwb0523 <kwb0523@163.com> -  2.2.4-2
 - Type:bugfix
 - ID:NA 
 - SUG:NA
 - DESC:fix CVE-2021-44225
+
+* Tue Dec 21 2021 kwb0523 <kwb0523@163.com> -  2.2.4-1
+- Type:bugfix
+- ID:NA 
+- SUG:NA
+- DESC:upgrade keepalived to 2.2.4
 
 * Wed Jun 10 2021 wangxp006 <wangxp006@163.com> -  2.0.20-3
 - Type:bugfix
