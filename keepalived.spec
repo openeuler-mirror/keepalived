@@ -104,11 +104,11 @@ install -Dd -m 0755 %{buildroot}%{_libexecdir}/keepalived
 - SUG:NA
 - DESC:upgrade keepalived to 2.2.4
 
-* Wed Jun 10 2021 wangxp006 <wangxp006@163.com> -  2.0.20-3
+* Thu Jun 10 2021 wangxp006 <wangxp006@163.com> -  2.0.20-3
 - Type:bugfix
 - ID:NA 
 - SUG:NA
 - DESC:backport upstream patches
 
-* Fri  21 2020 openEuler Buildteam <buildteam@openeuler.org> - 2.0.20-2
+* Tue May 12 2020 openEuler Buildteam <buildteam@openeuler.org> - 2.0.20-2
 - Package init
