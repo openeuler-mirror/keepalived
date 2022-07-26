@@ -8,15 +8,13 @@
 %global _hardened_build 1
 
 Name:		keepalived
-Version:	2.2.4
-Release:	2
+Version:	2.2.7
+Release:	1
 Summary:	High Availability monitor built upon LVS, VRRP and service pollers
 License:	GPLv2+
 URL:		http://www.keepalived.org/
 Source0:	http://www.keepalived.org/software/keepalived-%{version}.tar.gz
 Source1: 	keepalived.service
-
-Patch0001:	CVE-2021-44225.patch
 
 BuildRequires:	net-snmp-devel gcc systemd-units openssl-devel libnl3-devel
 BuildRequires:  ipset-devel iptables-devel libnfnetlink-devel libnftnl-devel
@@ -78,7 +76,7 @@ install -Dd -m 0755 %{buildroot}%{_libexecdir}/keepalived
 %doc README 
 %license COPYING
 %config(noreplace) %attr(0644,root,root) %{_sysconfdir}/sysconfig/keepalived
-%config(noreplace) %attr(0644,root,root) %{_sysconfdir}/keepalived/keepalived.conf
+%config(noreplace) %attr(0644,root,root) %{_sysconfdir}/keepalived/keepalived.conf.sample
 %attr(0755,root,root) %{_sbindir}/keepalived
 %dir %{_sysconfdir}/keepalived/
 %dir %{_libexecdir}/keepalived/
@@ -92,6 +90,9 @@ install -Dd -m 0755 %{buildroot}%{_libexecdir}/keepalived
 %{_mandir}/man*
 
 %changelog
+* Wed Jul 27 2022 YukariChiba <i@0x7f.cc> - 2.2.7-1
+- Upgrade version to 2.2.7
+
 * Tue Mar 29 2022 kwb0523 <kwb0523@163.com> -  2.2.4-2
 - Type:bugfix
 - ID:NA 
